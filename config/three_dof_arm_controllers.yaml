@@ -1,0 +1,8 @@
+gazebo_ros_control:
+  pid_gains:
+    shoulder_pan_joint:
+      p: 100.0  # Nilai P gain untuk shoulder_pan_joint
+    shoulder_pitch_joint:
+      p: 100.0  # Nilai P gain untuk shoulder_pitch_joint
+    elbow_pitch_joint:
+      p: 100.0  # Nilai P gain untuk elbow_pitch_joint

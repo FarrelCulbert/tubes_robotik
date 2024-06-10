@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+
+<launch>
+    <!-- Argumen untuk model -->
+    <arg name="model" default="$(find dobot_arm_pkg)/urdf/seven_dof_arm.xacro" />
+
+    <!-- Menjalankan Gazebo dan menampilkan model robot di dalamnya -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+
+    <!-- Menggunakan xacro untuk mengonversi file URDF -->
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+
+    <!-- Menjalankan node robot_state_publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="50.0"/>
+        <param name="tf_prefix" type="string" value=""/>
+    </node>
+
+    <!-- Menjalankan node joint_state_publisher -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
+
+    <!-- Menjalankan node joint_state_publisher_gui -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" output="screen"/>
+
+    <!-- Menjalankan node rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find dobot_arm_pkg)/urdf.rviz" output="screen" required="true" />
+
+    <!-- Spawner untuk menginisialisasi robot di Gazebo -->
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model seven_dof_arm" />
+</launch>
